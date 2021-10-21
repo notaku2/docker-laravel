@@ -3,6 +3,7 @@ version: '3'
 volumes:
   vendor-store:
   node_modules-store:
+  mongodata:
 
 services:
   php:
@@ -25,18 +26,13 @@ services:
     - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
     - php
-
+  
   db:
-    image: mysql:5.7.16
-    container_name: db
+    image: mongo
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: docker
-      MYSQL_USER: docker
-      MYSQL_PASSWORD: docker
-      TZ: 'Asia/Tokyo'
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    volumes:
-    - ./docker/db/data:/var/lib/mysql
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
     ports:
-    - 3306:3306
+      - 27017:27017
+    
